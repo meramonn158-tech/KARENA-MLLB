@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karena-MLLB | ملكة الميدان</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9962a;
+    --gold-light: #f0c040;
+    --gold-bright: #ffe066;
+    --blue-deep: #0a1628;
+    --blue-royal: #1a3060;
+    --blue-mid: #2255aa;
+    --crimson: #8b1a1a;
+    --cream: #f5e6c8;
+    --white: #fff8ee;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--blue-deep); color: var(--cream); font-family: 'Amiri', serif; overflow-x: hidden; cursor: none; }
+  .cursor { width: 18px; height: 18px; border: 2px solid var(--gold-light); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transition: transform 0.1s, background 0.2s; mix-blend-mode: screen; }
+  .cursor-trail { width: 6px; height: 6px; background: var(--gold-bright); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transition: transform 0.25s ease, opacity 0.3s; opacity: 0.7; }
+  #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .particle { position: absolute; border-radius: 50%; animation: floatParticle linear infinite; opacity: 0; }
+  @keyframes floatParticle { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.5; } 100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; } }
+  #hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; z-index: 1; }
+  .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 60% 40%, #1e3a6e 0%, #0a1628 60%, #000 100%); }
+  .hero-bg::before { content: ''; position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(201,150,42,0.04) 80px, rgba(201,150,42,0.04) 81px), repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(201,150,42,0.04) 80px, rgba(201,150,42,0.04) 81px); }
+  .rays { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .ray { position: absolute; width: 2px; height: 70vh; background: linear-gradient(to top, transparent, rgba(201,150,42,0.15), transparent); transform-origin: bottom center; animation: rayRotate 20s linear infinite; }
+  @keyframes rayRotate { from { transform: rotate(var(--angle)); } to { transform: rotate(calc(var(--angle) + 360deg)); } }
+  .hero-content { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1200px; width: 90%; align-items: center; }
+  .hero-text { animation: slideInRight 1.2s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; }
+  @keyframes slideInRight { from { transform: translateX(80px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .hero-badge { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, rgba(201,150,42,0.2), rgba(201,150,42,0.05)); border: 1px solid rgba(201,150,42,0.4); padding: 8px 20px; border-radius: 40px; font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.3em; color: var(--gold-light); margin-bottom: 28px; animation: pulseGlow 2s ease-in-out infinite; }
+  @keyframes pulseGlow { 0%,100% { box-shadow: 0 0 10px rgba(201,150,42,0.2); } 50% { box-shadow: 0 0 25px rgba(201,150,42,0.5); } }
+  .hero-title { font-family: 'Cinzel Decorative', cursive; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; line-height: 1.1; background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 40%, var(--gold-light) 70%, #fff8d0 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 16px; position: relative; }
+  .hero-title::after { content: attr(data-text); position: absolute; inset: 0; background: linear-gradient(135deg, var(--gold-bright), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; filter: blur(20px); opacity: 0.4; }
+  .hero-subtitle { font-family: 'Cinzel', serif; font-size: 1.1rem; color: var(--gold-light); letter-spacing: 0.2em; margin-bottom: 24px; }
+  .hero-desc { font-size: 1.1rem; line-height: 1.9; color: rgba(245,230,200,0.85); margin-bottom: 40px; }
+  .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, var(--gold) 0%, #8b6914 50%, var(--gold) 100%); background-size: 200% 200%; color: #0a0a0a; font-family: 'Cinzel', serif; font-weight: 700; font-size: 0.9rem; padding: 14px 32px; border-radius: 4px; text-decoration: none; border: none; cursor: pointer; animation: shimmerBtn 3s ease infinite; box-shadow: 0 4px 20px rgba(201,150,42,0.4), inset 0 1px 0 rgba(255,255,200,0.3); transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.1em; }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(201,150,42,0.6); }
+  @keyframes shimmerBtn { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 10px; background: transparent; color: var(--gold-light); font-family: 'Cinzel', serif; font-weight: 600; font-size: 0.9rem; padding: 13px 32px; border-radius: 4px; border: 1px solid rgba(201,150,42,0.5); cursor: pointer; text-decoration: none; letter-spacing: 0.1em; transition: all 0.3s; }
+  .btn-secondary:hover { background: rgba(201,150,42,0.1); border-color: var(--gold-light); box-shadow: 0 0 20px rgba(201,150,42,0.2); }
+  .hero-image-wrap { position: relative; animation: floatImage 6s ease-in-out infinite, fadeInLeft 1.2s 0.3s cubic-bezier(0.22,1,0.36,1) forwards; opacity: 0; display: flex; justify-content: center; }
+  @keyframes floatImage { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-18px); } }
+  @keyframes fadeInLeft { from { transform: translateX(-60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  .hero-img-frame { position: relative; display: inline-block; }
+  .hero-img-frame::before { content: ''; position: absolute; inset: -3px; background: linear-gradient(135deg, var(--gold-bright), var(--blue-mid), var(--gold), var(--crimson)); border-radius: 12px; animation: borderRotate 4s linear infinite; z-index: -1; }
+  @keyframes borderRotate { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
+  .hero-img { width: 100%; max-width: 420px; border-radius: 10px; display: block; position: relative; z-index: 1; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.8)); }
+  .hero-orb { position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; animation: orbPulse 4s ease-in-out infinite alternate; }
+  @keyframes orbPulse { from { opacity: 0.3; transform: scale(0.9); } to { opacity: 0.6; transform: scale(1.1); } }
+  .divider { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 40px 0; position: relative; z-index: 1; }
+  .divider-line { flex: 1; max-width: 300px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .divider-icon { color: var(--gold); font-size: 1.5rem; animation: spinSlow 8s linear infinite; }
+  @keyframes spinSlow { to { transform: rotate(360deg); } }
+  #gallery { position: relative; z-index: 1; padding: 80px 40px; }
+  .section-header { text-align: center; margin-bottom: 60px; }
+  .section-label { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; margin-bottom: 14px; display: block; }
+  .section-title { font-family: 'Cinzel Decorative', cursive; font-size: clamp(1.8rem, 4vw, 3rem); background: linear-gradient(135deg, var(--gold-bright), var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .gallery-masonry { max-width: 1100px; margin: 0 auto; columns: 3; column-gap: 24px; }
+  .gallery-item { break-inside: avoid; margin-bottom: 24px; position: relative; overflow: hidden; border-radius: 8px; cursor: pointer; transform: translateY(60px); opacity: 0; transition: transform 0.7s cubic-bezier(0.22,1,0.36,1), opacity 0.7s; border: 1px solid rgba(201,150,42,0.15); }
+  .gallery-item.in-view { transform: translateY(0); opacity: 1; }
+  .gallery-item::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(201,150,42,0.15), rgba(26,48,96,0.3)); opacity: 0; transition: opacity 0.4s; z-index: 1; }
+  .gallery-item:hover::before { opacity: 1; }
+  .gallery-item:hover img { transform: scale(1.06); filter: brightness(1.1) saturate(1.2); }
+  .gallery-item img { width: 100%; display: block; border-radius: 8px; transition: transform 0.6s cubic-bezier(0.22,1,0.36,1), filter 0.4s; }
+  .gallery-item video { width: 100%; display: block; border-radius: 8px; }
+  .gallery-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%); padding: 24px 16px 16px; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); z-index: 2; font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold-light); letter-spacing: 0.15em; text-align: center; }
+  .gallery-item:hover .gallery-overlay { transform: translateY(0); }
+  .video-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: var(--gold-light); font-size: 0.7rem; font-family: 'Cinzel', serif; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(201,150,42,0.3); z-index: 3; }
+  #features { position: relative; z-index: 1; padding: 80px 40px; background: linear-gradient(180deg, transparent, rgba(10,22,40,0.8), transparent); }
+  .features-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 28px; }
+  .feature-card { background: linear-gradient(135deg, rgba(26,48,96,0.4), rgba(10,22,40,0.6)); border: 1px solid rgba(201,150,42,0.2); border-radius: 10px; padding: 32px 28px; text-align: center; position: relative; overflow: hidden; transform: translateY(40px); opacity: 0; transition: transform 0.6s, opacity 0.6s, box-shadow 0.3s, border-color 0.3s; backdrop-filter: blur(10px); }
+  .feature-card.in-view { transform: translateY(0); opacity: 1; }
+  .feature-card:hover { border-color: rgba(201,150,42,0.5); box-shadow: 0 8px 40px rgba(201,150,42,0.15), 0 0 0 1px rgba(201,150,42,0.1); }
+  .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); transform: scaleX(0); transition: transform 0.4s; }
+  .feature-card:hover::before { transform: scaleX(1); }
+  .feature-icon { font-size: 2.5rem; margin-bottom: 16px; display: block; animation: iconBounce 3s ease-in-out infinite; }
+  @keyframes iconBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  .feature-title { font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700; color: var(--gold-light); margin-bottom: 12px; letter-spacing: 0.1em; }
+  .feature-desc { font-size: 0.95rem; line-height: 1.7; color: rgba(245,230,200,0.75); }
+  #stats { position: relative; z-index: 1; padding: 80px 40px; }
+  .stats-row { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+  .stat-item { text-align: center; padding: 40px 20px; border-right: 1px solid rgba(201,150,42,0.15); transform: scale(0.8); opacity: 0; transition: transform 0.6s, opacity 0.6s; }
+  .stat-item:last-child { border-right: none; }
+  .stat-item.in-view { transform: scale(1); opacity: 1; }
+  .stat-num { font-family: 'Cinzel Decorative', cursive; font-size: clamp(2rem, 4vw, 3rem); background: linear-gradient(135deg, var(--gold-bright), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; display: block; }
+  .stat-label { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.2em; color: rgba(245,230,200,0.6); margin-top: 8px; }
+  #cta { position: relative; z-index: 1; padding: 100px 40px; text-align: center; }
+  .cta-inner { max-width: 700px; margin: 0 auto; background: linear-gradient(135deg, rgba(26,48,96,0.5), rgba(10,22,40,0.8)); border: 1px solid rgba(201,150,42,0.3); border-radius: 16px; padding: 60px 40px; position: relative; overflow: hidden; }
+  .cta-inner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(201,150,42,0.1) 0%, transparent 70%); pointer-events: none; }
+  .cta-title { font-family: 'Cinzel Decorative', cursive; font-size: clamp(1.5rem, 3vw, 2.2rem); color: var(--gold-light); margin-bottom: 16px; }
+  .cta-desc { font-size: 1.05rem; color: rgba(245,230,200,0.75); margin-bottom: 32px; line-height: 1.8; }
+  footer { position: relative; z-index: 1; border-top: 1px solid rgba(201,150,42,0.15); padding: 40px; text-align: center; }
+  .footer-logo { font-family: 'Cinzel Decorative', cursive; font-size: 1.5rem; background: linear-gradient(135deg, var(--gold-bright), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px; }
+  .footer-copy { font-size: 0.8rem; color: rgba(245,230,200,0.35); letter-spacing: 0.15em; }
+  #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.4s; }
+  #lightbox.open { opacity: 1; pointer-events: all; }
+  #lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 10px; border: 1px solid rgba(201,150,42,0.3); box-shadow: 0 30px 80px rgba(0,0,0,0.8); transform: scale(0.85); transition: transform 0.4s cubic-bezier(0.22,1,0.36,1); }
+  #lightbox.open img { transform: scale(1); }
+  #lightbox-close { position: absolute; top: 24px; right: 32px; color: var(--gold-light); font-size: 2rem; cursor: pointer; background: none; border: none; font-family: sans-serif; transition: transform 0.2s, color 0.2s; }
+  #lightbox-close:hover { transform: rotate(90deg); color: var(--gold-bright); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 40px; display: flex; align-items: center; justify-content: space-between; background: linear-gradient(180deg, rgba(10,22,40,0.95) 0%, transparent 100%); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(201,150,42,0.1); transition: padding 0.3s; }
+  nav.scrolled { padding: 14px 40px; background: rgba(10,22,40,0.98); border-bottom-color: rgba(201,150,42,0.2); }
+  .nav-logo { font-family: 'Cinzel Decorative', cursive; font-size: 1.2rem; background: linear-gradient(135deg, var(--gold-bright), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 0.1em; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: rgba(245,230,200,0.7); text-decoration: none; font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.15em; transition: color 0.2s; cursor: pointer; }
+  .nav-links a:hover { color: var(--gold-light); }
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--blue-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* PAGE OVERLAY */
+  .page-overlay { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: flex-start; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s; overflow-y: auto; padding: 20px; }
+  .page-overlay.open { opacity: 1; pointer-events: all; }
+  .page-overlay-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.92); backdrop-filter: blur(12px); }
+  .page-modal { position: relative; z-index: 1; width: 100%; max-width: 760px; background: linear-gradient(145deg, #0d1f3c 0%, #0a1628 60%, #060f1e 100%); border: 1px solid rgba(201,150,42,0.25); border-radius: 16px; padding: 50px 48px 60px; margin: auto; transform: translateY(40px) scale(0.97); transition: transform 0.5s cubic-bezier(0.22,1,0.36,1); box-shadow: 0 40px 100px rgba(0,0,0,0.8), 0 0 0 1px rgba(201,150,42,0.1); }
+  .page-overlay.open .page-modal { transform: translateY(0) scale(1); }
+  .page-modal-close { position: absolute; top: 20px; left: 20px; background: rgba(201,150,42,0.1); border: 1px solid rgba(201,150,42,0.2); color: var(--gold-light); width: 36px; height: 36px; border-radius: 50%; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .page-modal-close:hover { background: rgba(201,150,42,0.25); transform: rotate(90deg); }
+  .page-modal-top-deco { position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--gold), var(--gold-bright), var(--gold), transparent); border-radius: 16px 16px 0 0; }
+  .page-modal-header { text-align: center; margin-bottom: 40px; }
+  .page-modal-icon { font-size: 3.5rem; margin-bottom: 16px; display: block; animation: iconFloat 3s ease-in-out infinite; }
+  @keyframes iconFloat { 0%,100%{ transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-8px) rotate(3deg); } }
+  .page-modal-title { font-family: 'Cinzel Decorative', cursive; font-size: clamp(1.4rem, 3vw, 2rem); background: linear-gradient(135deg, var(--gold-bright), var(--gold-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+  .page-modal-sub { font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.25em; color: rgba(245,230,200,0.5); }
+
+  /* ORDER PAGE */
+  .order-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 28px; }
+  .order-card { background: linear-gradient(135deg, rgba(26,48,96,0.5), rgba(10,22,40,0.7)); border: 1px solid rgba(201,150,42,0.15); border-radius: 10px; padding: 20px; cursor: pointer; text-align: center; transition: all 0.3s; position: relative; overflow: hidden; }
+  .order-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%, rgba(201,150,42,0.12), transparent 70%); opacity: 0; transition: opacity 0.3s; }
+  .order-card:hover::before, .order-card.selected::before { opacity: 1; }
+  .order-card:hover, .order-card.selected { border-color: var(--gold); box-shadow: 0 0 20px rgba(201,150,42,0.2); transform: translateY(-3px); }
+  .order-card.selected { border-color: var(--gold-bright); }
+  .order-card-icon { font-size: 2rem; display: block; margin-bottom: 8px; }
+  .order-card-name { font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700; color: var(--gold-light); margin-bottom: 6px; }
+  .order-card-desc { font-size: 0.8rem; color: rgba(245,230,200,0.6); line-height: 1.5; }
+  .order-card .check { position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #000; opacity: 0; transform: scale(0); transition: all 0.25s; }
+  .order-card.selected .check { opacity: 1; transform: scale(1); }
+  .form-group { margin-bottom: 20px; }
+  .form-label { display: block; font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.15em; color: var(--gold-light); margin-bottom: 8px; }
+  .form-input, .form-select, .form-textarea { width: 100%; background: rgba(10,22,40,0.8); border: 1px solid rgba(201,150,42,0.2); border-radius: 6px; padding: 12px 16px; color: var(--cream); font-family: 'Amiri', serif; font-size: 1rem; outline: none; transition: border-color 0.3s, box-shadow 0.3s; direction: rtl; }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); box-shadow: 0 0 15px rgba(201,150,42,0.15); }
+  .form-select option { background: #0d1f3c; }
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, var(--gold) 0%, #6b4e10 50%, var(--gold) 100%); background-size: 200%; border: none; border-radius: 8px; color: #0a0a0a; font-family: 'Cinzel', serif; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.1em; cursor: pointer; animation: shimmerBtn 3s ease infinite; box-shadow: 0 6px 24px rgba(201,150,42,0.35); transition: transform 0.2s, box-shadow 0.2s; margin-top: 8px; }
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 34px rgba(201,150,42,0.5); }
+  .submit-success { display: none; text-align: center; padding: 30px; animation: fadeInUp 0.5s ease; }
+  @keyframes fadeInUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .submit-success-icon { font-size: 4rem; display: block; margin-bottom: 16px; }
+  .submit-success-text { font-family: 'Cinzel', serif; color: var(--gold-light); font-size: 1.1rem; margin-bottom: 8px; }
+  .submit-success-sub { color: rgba(245,230,200,0.6); font-size: 0.9rem; }
+
+  /* CONTACT */
+  .contact-options { display: flex; flex-direction: column; gap: 20px; }
+  .contact-card { display: flex; align-items: center; gap: 24px; background: linear-gradient(135deg, rgba(26,48,96,0.4), rgba(10,22,40,0.6)); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 28px 32px; text-decoration: none; transition: all 0.35s; position: relative; overflow: hidden; }
+  .contact-card::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s; }
+  .contact-card.telegram::before { background: radial-gradient(ellipse at 30% 50%, rgba(41,182,246,0.12), transparent 70%); }
+  .contact-card.whatsapp::before { background: radial-gradient(ellipse at 30% 50%, rgba(37,211,102,0.12), transparent 70%); }
+  .contact-card:hover::before { opacity: 1; }
+  .contact-card.telegram:hover { border-color: rgba(41,182,246,0.5); box-shadow: 0 8px 40px rgba(41,182,246,0.15); transform: translateX(-6px); }
+  .contact-card.whatsapp:hover { border-color: rgba(37,211,102,0.5); box-shadow: 0 8px 40px rgba(37,211,102,0.15); transform: translateX(-6px); }
+  .contact-logo { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 2rem; flex-shrink: 0; transition: transform 0.3s; }
+  .contact-card:hover .contact-logo { transform: scale(1.1) rotate(-5deg); }
+  .contact-card.telegram .contact-logo { background: linear-gradient(135deg, #1e88e5, #29b6f6); box-shadow: 0 8px 20px rgba(41,182,246,0.3); }
+  .contact-card.whatsapp .contact-logo { background: linear-gradient(135deg, #1b5e20, #25d366); box-shadow: 0 8px 20px rgba(37,211,102,0.3); }
+  .contact-info { flex: 1; }
+  .contact-platform { font-family: 'Cinzel', serif; font-size: 0.7rem; letter-spacing: 0.3em; margin-bottom: 6px; text-transform: uppercase; }
+  .contact-card.telegram .contact-platform { color: #29b6f6; }
+  .contact-card.whatsapp .contact-platform { color: #25d366; }
+  .contact-name { font-family: 'Cinzel Decorative', cursive; font-size: 1.3rem; color: var(--cream); margin-bottom: 6px; }
+  .contact-desc { font-size: 0.88rem; color: rgba(245,230,200,0.55); line-height: 1.5; }
+  .contact-arrow { font-size: 1.5rem; color: rgba(245,230,200,0.25); transition: all 0.3s; }
+  .contact-card.telegram:hover .contact-arrow { color: #29b6f6; transform: translateX(-6px); }
+  .contact-card.whatsapp:hover .contact-arrow { color: #25d366; transform: translateX(-6px); }
+  .contact-divider { display: flex; align-items: center; gap: 16px; margin: 4px 0; }
+  .contact-divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(201,150,42,0.2), transparent); }
+  .contact-divider-txt { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.2em; color: rgba(245,230,200,0.3); }
+
+  /* FLOATING BTNS */
+  .floating-btns { position: fixed; bottom: 28px; left: 28px; display: flex; flex-direction: column; gap: 14px; z-index: 500; }
+  .float-btn { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; text-decoration: none; box-shadow: 0 4px 20px rgba(0,0,0,0.4); transition: all 0.3s; border: none; cursor: pointer; animation: floatBtnPop 0.5s cubic-bezier(0.22,1,0.36,1) backwards; position: relative; }
+  .float-btn::after { content: attr(data-label); position: absolute; left: calc(100% + 12px); background: rgba(0,0,0,0.85); color: #fff; font-family: 'Amiri', serif; font-size: 0.85rem; white-space: nowrap; padding: 6px 14px; border-radius: 6px; opacity: 0; transform: translateX(10px); transition: all 0.25s; pointer-events: none; }
+  .float-btn:hover::after { opacity: 1; transform: translateX(0); }
+  .float-btn:hover { transform: scale(1.12); }
+  .float-btn.tg { background: linear-gradient(135deg, #1e88e5, #29b6f6); animation-delay: 0.1s; }
+  .float-btn.wa { background: linear-gradient(135deg, #128c7e, #25d366); animation-delay: 0.2s; }
+  @keyframes floatBtnPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .mobile-nav-btns { display: none; gap: 8px; }
+  .mob-btn { background: rgba(201,150,42,0.15); border: 1px solid rgba(201,150,42,0.3); color: var(--gold-light); font-size: 1.2rem; width: 38px; height: 38px; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+  .mob-btn:hover { background: rgba(201,150,42,0.3); }
+  .cta-btns-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+  .cta-big-btn { font-size: 1.05rem !important; padding: 16px 36px !important; }
+
+  /* ===== RESOURCE CALCULATOR ===== */
+  #resources-section { position: relative; z-index: 1; padding: 80px 40px; }
+  .resource-tabs { display: flex; gap: 10px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
+  .res-tab { padding: 10px 24px; background: rgba(26,48,96,0.4); border: 1px solid rgba(201,150,42,0.2); border-radius: 30px; color: rgba(245,230,200,0.6); font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 0.1em; cursor: pointer; transition: all 0.3s; }
+  .res-tab.active, .res-tab:hover { background: rgba(201,150,42,0.15); border-color: var(--gold); color: var(--gold-light); }
+  .resource-calculator { max-width: 700px; margin: 0 auto; background: linear-gradient(135deg, rgba(26,48,96,0.4), rgba(10,22,40,0.7)); border: 1px solid rgba(201,150,42,0.2); border-radius: 16px; padding: 40px; }
+  .resource-row { display: grid; grid-template-columns: 1fr auto auto; gap: 16px; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(201,150,42,0.1); }
+  .resource-row:last-of-type { border-bottom: none; }
+  .res-icon-name { display: flex; align-items: center; gap: 14px; }
+  .res-icon { font-size: 2rem; }
+  .res-name { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold-light); }
+  .res-base-price { font-size: 0.75rem; color: rgba(245,230,200,0.45); margin-top: 3px; }
+  .res-qty-wrap { display: flex; align-items: center; gap: 10px; }
+  .res-qty-btn { width: 32px; height: 32px; border: 1px solid rgba(201,150,42,0.3); border-radius: 50%; background: rgba(26,48,96,0.5); color: var(--gold-light); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .res-qty-btn:hover { background: rgba(201,150,42,0.2); border-color: var(--gold); }
+  .res-qty-input { width: 80px; background: rgba(10,22,40,0.8); border: 1px solid rgba(201,150,42,0.2); border-radius: 6px; padding: 8px 10px; color: var(--cream); font-family: 'Cinzel', serif; font-size: 0.9rem; text-align: center; outline: none; transition: border-color 0.3s; }
+  .res-qty-input:focus { border-color: var(--gold); }
+  .res-price-tag { font-family: 'Cinzel Decorative', cursive; font-size: 1.1rem; color: var(--gold-bright); min-width: 80px; text-align: center; }
+  .res-unit { font-size: 0.7rem; color: rgba(245,230,200,0.4); font-family: 'Cinzel', serif; }
+  .calc-total { margin-top: 24px; padding: 20px 24px; background: linear-gradient(135deg, rgba(201,150,42,0.1), rgba(26,48,96,0.3)); border: 1px solid rgba(201,150,42,0.3); border-radius: 10px; display: flex; justify-content: space-between; align-items: center; }
+  .calc-total-label { font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.15em; color: rgba(245,230,200,0.7); }
+  .calc-total-price { font-family: 'Cinzel Decorative', cursive; font-size: 1.8rem; color: var(--gold-bright); }
+  .calc-note { font-size: 0.78rem; color: rgba(245,230,200,0.4); margin-top: 10px; text-align: center; font-family: 'Cinzel', serif; letter-spacing: 0.05em; line-height: 1.6; }
+  .order-resource-btn { width: 100%; margin-top: 20px; padding: 15px; background: linear-gradient(135deg, var(--gold) 0%, #6b4e10 50%, var(--gold) 100%); background-size: 200%; border: none; border-radius: 8px; color: #0a0a0a; font-family: 'Cinzel', serif; font-weight: 700; font-size: 1rem; letter-spacing: 0.1em; cursor: pointer; animation: shimmerBtn 3s ease infinite; transition: transform 0.2s; }
+  .order-resource-btn:hover { transform: translateY(-2px); }
+
+  /* ===== PAYMENT MODAL ===== */
+  .payment-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 24px 0; }
+  .pay-card { border: 1px solid rgba(201,150,42,0.15); border-radius: 10px; padding: 20px 14px; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(10,22,40,0.6); }
+  .pay-card:hover, .pay-card.selected { border-color: var(--gold); background: rgba(201,150,42,0.08); transform: translateY(-3px); }
+  .pay-card.selected { border-color: var(--gold-bright); box-shadow: 0 0 20px rgba(201,150,42,0.2); }
+  .pay-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+  .pay-name { font-family: 'Cinzel', serif; font-size: 0.8rem; color: var(--gold-light); letter-spacing: 0.1em; }
+  .pay-info-box { display: none; background: rgba(26,48,96,0.5); border: 1px solid rgba(201,150,42,0.2); border-radius: 10px; padding: 20px; margin-top: 16px; }
+  .pay-info-box.show { display: block; animation: fadeInUp 0.3s ease; }
+  .pay-info-label { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.15em; color: rgba(245,230,200,0.5); margin-bottom: 8px; }
+  .pay-info-value { font-family: 'Cinzel Decorative', cursive; font-size: 1.1rem; color: var(--gold-bright); letter-spacing: 0.08em; direction: ltr; }
+  .pay-copy-btn { display: inline-block; margin-top: 10px; padding: 6px 18px; background: rgba(201,150,42,0.15); border: 1px solid rgba(201,150,42,0.3); border-radius: 20px; color: var(--gold-light); font-family: 'Cinzel', serif; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; }
+  .pay-copy-btn:hover { background: rgba(201,150,42,0.25); }
+
+  /* ===== SUBSCRIPTION PLANS ===== */
+  #subscriptions { position: relative; z-index: 1; padding: 80px 40px; }
+  .plans-grid { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+  .plan-card { background: linear-gradient(145deg, rgba(26,48,96,0.5), rgba(10,22,40,0.7)); border: 1px solid rgba(201,150,42,0.15); border-radius: 14px; padding: 32px 24px; text-align: center; position: relative; overflow: hidden; transform: translateY(40px); opacity: 0; transition: all 0.6s; }
+  .plan-card.in-view { transform: translateY(0); opacity: 1; }
+  .plan-card.featured { border-color: var(--gold); box-shadow: 0 0 40px rgba(201,150,42,0.15); }
+  .plan-card:hover { transform: translateY(-6px) !important; border-color: var(--gold-light); box-shadow: 0 12px 40px rgba(201,150,42,0.2); }
+  .plan-badge { position: absolute; top: 12px; right: 12px; background: var(--gold); color: #000; font-family: 'Cinzel', serif; font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.1em; }
+  .plan-icon { font-size: 2.5rem; margin-bottom: 16px; display: block; }
+  .plan-name { font-family: 'Cinzel', serif; font-size: 0.9rem; letter-spacing: 0.2em; color: var(--gold-light); margin-bottom: 12px; }
+  .plan-price { font-family: 'Cinzel Decorative', cursive; font-size: 2rem; color: var(--gold-bright); margin-bottom: 6px; }
+  .plan-price-unit { font-family: 'Cinzel', serif; font-size: 0.75rem; color: rgba(245,230,200,0.45); margin-bottom: 20px; }
+  .plan-features { list-style: none; margin-bottom: 24px; }
+  .plan-features li { font-size: 0.85rem; color: rgba(245,230,200,0.7); padding: 5px 0; border-bottom: 1px solid rgba(201,150,42,0.08); }
+  .plan-features li:last-child { border-bottom: none; }
+  .plan-features li::before { content: '✦ '; color: var(--gold); }
+  .plan-btn { width: 100%; padding: 12px; border: 1px solid rgba(201,150,42,0.4); background: transparent; color: var(--gold-light); font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.1em; border-radius: 6px; cursor: pointer; transition: all 0.3s; }
+  .plan-btn:hover { background: rgba(201,150,42,0.15); border-color: var(--gold); }
+  .plan-card.featured .plan-btn { background: linear-gradient(135deg, var(--gold), #8b6914); color: #000; font-weight: 700; border: none; }
+  .plan-card.free-plan { border-color: rgba(255,255,255,0.1); }
+  .plan-card.free-plan .plan-price { color: #7ec8e3; }
+
+  /* ===== CASTLE VIDEOS PAGE ===== */
+  .videos-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-height: 460px; overflow-y: auto; padding-right: 6px; }
+  .videos-grid::-webkit-scrollbar { width: 4px; }
+  .videos-grid::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+  .video-link-card { display: flex; align-items: center; gap: 14px; background: rgba(26,48,96,0.4); border: 1px solid rgba(201,150,42,0.15); border-radius: 10px; padding: 16px; text-decoration: none; transition: all 0.3s; }
+  .video-link-card:hover { border-color: var(--gold); transform: translateX(-4px); background: rgba(201,150,42,0.08); }
+  .video-thumb { width: 54px; height: 54px; background: linear-gradient(135deg, #1a1a3e, #0a1628); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+  .video-info-title { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--gold-light); margin-bottom: 4px; }
+  .video-info-sub { font-size: 0.75rem; color: rgba(245,230,200,0.45); }
+  .no-videos-msg { text-align: center; padding: 40px; color: rgba(245,230,200,0.3); font-family: 'Cinzel', serif; font-size: 0.85rem; letter-spacing: 0.1em; grid-column: 1/-1; }
+
+  /* ADMIN PANEL */
+  #admin-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.97); display: none; overflow-y: auto; padding: 30px 20px; }
+  #admin-overlay.show { display: block; }
+  .admin-panel { max-width: 900px; margin: 0 auto; }
+  .admin-header { text-align: center; margin-bottom: 40px; padding: 30px; background: linear-gradient(135deg, rgba(26,48,96,0.6), rgba(10,22,40,0.8)); border: 1px solid rgba(201,150,42,0.3); border-radius: 16px; }
+  .admin-title { font-family: 'Cinzel Decorative', cursive; font-size: 2rem; background: linear-gradient(135deg, var(--gold-bright), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 8px; }
+  .admin-subtitle { font-family: 'Cinzel', serif; font-size: 0.8rem; color: rgba(245,230,200,0.4); letter-spacing: 0.2em; }
+  .admin-section { background: linear-gradient(145deg, rgba(13,31,60,0.8), rgba(10,22,40,0.9)); border: 1px solid rgba(201,150,42,0.15); border-radius: 14px; padding: 28px; margin-bottom: 24px; }
+  .admin-section-title { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold-light); letter-spacing: 0.15em; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid rgba(201,150,42,0.15); display: flex; align-items: center; gap: 10px; }
+  .admin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .admin-price-input { background: rgba(10,22,40,0.8); border: 1px solid rgba(201,150,42,0.2); border-radius: 8px; padding: 12px 16px; color: var(--cream); font-family: 'Cinzel', serif; font-size: 1rem; width: 100%; outline: none; text-align: center; transition: border-color 0.3s; }
+  .admin-price-input:focus { border-color: var(--gold); }
+  .admin-price-label { font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.1em; color: rgba(245,230,200,0.5); margin-bottom: 6px; text-align: center; }
+  .admin-input-wrap { text-align: center; }
+  .admin-btn { padding: 10px 24px; background: linear-gradient(135deg, var(--gold), #6b4e10); border: none; border-radius: 6px; color: #000; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; letter-spacing: 0.1em; transition: all 0.2s; }
+  .admin-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(201,150,42,0.4); }
+  .admin-btn-outline { background: transparent; border: 1px solid rgba(201,150,42,0.4); color: var(--gold-light); }
+  .admin-btn-outline:hover { background: rgba(201,150,42,0.1); }
+  .admin-btn-danger { background: linear-gradient(135deg, #8b1a1a, #5c0f0f); color: #fff; border: none; }
+  .admin-media-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  .admin-media-item { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9; background: rgba(10,22,40,0.6); border: 1px solid rgba(201,150,42,0.15); }
+  .admin-media-item img, .admin-media-item video { width: 100%; height: 100%; object-fit: cover; }
+  .admin-media-del { position: absolute; top: 6px; right: 6px; background: rgba(139,26,26,0.85); border: none; color: #fff; width: 26px; height: 26px; border-radius: 50%; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .admin-media-label { position: absolute; bottom: 4px; left: 4px; background: rgba(0,0,0,0.7); color: var(--gold-light); font-size: 0.65rem; font-family: 'Cinzel', serif; padding: 2px 8px; border-radius: 10px; }
+  .admin-upload-area { border: 2px dashed rgba(201,150,42,0.25); border-radius: 10px; padding: 30px; text-align: center; cursor: pointer; transition: all 0.3s; margin-top: 14px; }
+  .admin-upload-area:hover { border-color: var(--gold); background: rgba(201,150,42,0.04); }
+  .admin-upload-icon { font-size: 2.5rem; margin-bottom: 10px; }
+  .admin-upload-text { font-family: 'Cinzel', serif; font-size: 0.8rem; color: rgba(245,230,200,0.5); letter-spacing: 0.1em; }
+  .admin-video-list { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .admin-video-item { display: flex; align-items: center; justify-content: space-between; background: rgba(10,22,40,0.6); border: 1px solid rgba(201,150,42,0.1); border-radius: 8px; padding: 12px 16px; }
+  .admin-video-info { flex: 1; }
+  .admin-video-title-input { background: transparent; border: none; border-bottom: 1px solid rgba(201,150,42,0.2); color: var(--cream); font-family: 'Amiri', serif; font-size: 0.95rem; padding: 4px 0; width: 100%; outline: none; }
+  .admin-video-url { font-size: 0.75rem; color: rgba(245,230,200,0.35); margin-top: 4px; font-family: monospace; }
+  .admin-save-bar { position: sticky; bottom: 0; background: rgba(10,22,40,0.98); border-top: 1px solid rgba(201,150,42,0.2); padding: 16px 0; text-align: center; display: flex; gap: 16px; justify-content: center; margin-top: 30px; }
+  .admin-plan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .admin-plan-item { background: rgba(10,22,40,0.6); border: 1px solid rgba(201,150,42,0.1); border-radius: 8px; padding: 16px; }
+  .admin-plan-name { font-family: 'Cinzel', serif; font-size: 0.78rem; color: rgba(245,230,200,0.5); letter-spacing: 0.1em; margin-bottom: 8px; }
+  .admin-login { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 20px; }
+  .admin-login-box { background: linear-gradient(145deg, #0d1f3c, #060f1e); border: 1px solid rgba(201,150,42,0.3); border-radius: 16px; padding: 50px 48px; width: 100%; max-width: 420px; text-align: center; }
+  .admin-login-title { font-family: 'Cinzel Decorative', cursive; font-size: 1.5rem; color: var(--gold-light); margin-bottom: 30px; }
+  .admin-login-input { width: 100%; background: rgba(10,22,40,0.8); border: 1px solid rgba(201,150,42,0.2); border-radius: 8px; padding: 14px 16px; color: var(--cream); font-family: 'Amiri', serif; font-size: 1rem; outline: none; text-align: center; margin-bottom: 16px; direction: ltr; }
+  .admin-login-input:focus { border-color: var(--gold); }
+
+  /* Tabs inside modals */
+  .modal-tabs { display: flex; border-bottom: 1px solid rgba(201,150,42,0.15); margin-bottom: 28px; }
+  .modal-tab { flex: 1; padding: 12px; font-family: 'Cinzel', serif; font-size: 0.78rem; letter-spacing: 0.1em; color: rgba(245,230,200,0.5); border: none; background: none; cursor: pointer; transition: all 0.3s; border-bottom: 2px solid transparent; }
+  .modal-tab.active { color: var(--gold-light); border-bottom-color: var(--gold); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  @media (max-width: 768px) {
+    .hero-content { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+    .hero-image-wrap { order: -1; }
+    .gallery-masonry { columns: 2; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .mobile-nav-btns { display: flex; }
+    .order-grid { grid-template-columns: 1fr 1fr; }
+    .page-modal { padding: 40px 24px 50px; }
+    .contact-card { padding: 20px; flex-direction: column; text-align: center; }
+    .contact-arrow { display: none; }
+    .floating-btns { bottom: 20px; left: 16px; }
+    .payment-methods { grid-template-columns: repeat(3, 1fr); }
+    .videos-grid { grid-template-columns: 1fr; }
+    .admin-grid { grid-template-columns: 1fr 1fr; }
+    .admin-media-list { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+<div id="particles"></div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lightbox-close">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">⚜ Karena-MLLB</div>
+  <ul class="nav-links">
+    <li><a href="#hero">الرئيسية</a></li>
+    <li><a href="#gallery">المعرض</a></li>
+    <li><a href="#resources-section">الموارد</a></li>
+    <li><a href="#subscriptions">الاشتراكات</a></li>
+    <li><a onclick="openPage('order')">🛒 اطلب الآن</a></li>
+    <li><a onclick="openPage('contact')">📲 تواصل</a></li>
+  </ul>
+  <div class="mobile-nav-btns">
+    <button class="mob-btn" onclick="openPage('order')">🛒</button>
+    <button class="mob-btn" onclick="openPage('contact')">📲</button>
+    <button class="mob-btn" onclick="openAdminLogin()" title="لوحة التحكم">⚙️</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="rays" id="rays"></div>
+  <div class="hero-orb" style="width:500px;height:500px;background:rgba(34,85,170,0.3);top:-100px;right:-100px;"></div>
+  <div class="hero-orb" style="width:400px;height:400px;background:rgba(139,26,26,0.2);bottom:-80px;left:-80px;animation-delay:-2s;"></div>
+  <div class="hero-orb" style="width:300px;height:300px;background:rgba(201,150,42,0.15);bottom:30%;left:20%;animation-delay:-4s;"></div>
+  <div class="hero-content">
+    <div class="hero-image-wrap">
+      <div class="hero-img-frame">
+        <img src="karena1.png" alt="Karena MLLB" class="hero-img" width="700" height="500">
+      </div>
+    </div>
+    <div class="hero-text">
+      <div class="hero-badge">✦ ملكة الميدان ✦</div>
+      <h1 class="hero-title" data-text="KARENA-MLLB">KARENA-MLLB</h1>
+      <p class="hero-subtitle">⚔ القوة · الحكمة · الانتصار ⚔</p>
+      <p class="hero-desc">انضم إلى إمبراطورية لا تُهزم. بناء القلاع، تحريك الجيوش، والسيطرة على عالم فاتحون العصر الذهبي. تجربة لا مثيل لها تنتظرك.</p>
+      <div class="btn-group">
+        <button onclick="openPage('order')" class="btn-primary">🛒 اطلب موارد أو بوت</button>
+        <button onclick="openPage('contact')" class="btn-secondary">📲 تواصل معنا</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><span class="divider-icon">✦</span><div class="divider-line"></div></div>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-header">
+    <span class="section-label">✦ لقطات الميدان ✦</span>
+    <h2 class="section-title">معرض الملكة</h2>
+  </div>
+  <div class="gallery-masonry" id="galleryMasonry">
+    <!-- Static items first -->
+    <div class="gallery-item" data-label="ملكة الغروب">
+      <img src="karena2.png" alt="Karena 1">
+      <div class="gallery-overlay">ملكة الغروب ✦ سيدة الميدان</div>
+    </div>
+    <div class="gallery-item" data-label="فاتحون">
+      <img src="karena3.png" alt="فاتحون">
+      <div class="gallery-overlay">فاتحون العصر الذهبي ✦ سيطر على العالم</div>
+    </div>
+    <div class="gallery-item" data-label="جيش الملكة">
+      <img src="karena4.png" alt="Karena 3">
+      <div class="gallery-overlay">إمبراطورية لا تُقهر ✦ جيوش بلا حدود</div>
+    </div>
+    <!-- Dynamic gallery items injected by JS -->
+         <div class="gallery-item" data-label="جيش الملكة">
+      <img src="karena11.png" alt="Karena 3">
+      <div class="gallery-overlay">إمبراطورية لا تُقهر ✦ جيوش بلا حدود</div>
+    </div>    <div class="gallery-item" data-label="جيش الملكة">
+      <img src="karena9.png" alt="Karena 3">
+      <div class="gallery-overlay">إمبراطورية لا تُقهر ✦ جيوش بلا حدود</div>
+    </div>
+        <div class="gallery-item" data-label="جيش الملكة">
+      <img src="karena7.png" alt="Karena 3">
+      <div class="gallery-overlay">إمبراطورية لا تُقهر ✦ جيوش بلا حدود</div>
+    </div>
+        <div class="gallery-item" data-label="جيش الملكة">
+      <img src="karena8.png" alt="Karena 3">
+      <div class="gallery-overlay">إمبراطورية لا تُقهر ✦ جيوش بلا حدود</div>
+    </div>
+        <div class="gallery-item" data-label="جيش الملكة">
+      <img src="karena6.png" alt="Karena 3">
+      <div class="gallery-overlay">إمبراطورية لا تُقهر ✦ جيوش بلا حدود</div>
+    </div>
+        <div class="gallery-item" data-label="جيش الملكة">
+      <img src="karena10.png" alt="Karena 3">
+      <div class="gallery-overlay">إمبراطورية لا تُقهر ✦ جيوش بلا حدود</div>
+    </div>
+        <div class="gallery-item" data-label="جيش الملكة">
+      <img src="karena5.png" alt="Karena 3">
+      <div class="gallery-overlay">إمبراطورية لا تُقهر ✦ جيوش بلا حدود</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><span class="divider-icon">⚜</span><div class="divider-line"></div></div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-header">
+    <span class="section-label">✦ ما تحصل عليه ✦</span>
+    <h2 class="section-title">القوة الكاملة</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card"><span class="feature-icon">⚔️</span><h3 class="feature-title">قلاع لا تُقهر</h3><p class="feature-desc">احكم بناء إمبراطوريتك بقلاع بتصميمات دفاعية متقدمة لا يخترقها أحد</p></div>
+    <div class="feature-card" style="animation-delay:0.1s"><span class="feature-icon">🤖</span><h3 class="feature-title">بوتات ذكية 24/7</h3><p class="feature-desc">بوتات تعمل لأجلك دون توقف — تجمع الموارد وتبني وتتدرب وأنت نائم</p></div>
+    <div class="feature-card" style="animation-delay:0.2s"><span class="feature-icon">💰</span><h3 class="feature-title">موارد بلا حدود</h3><p class="feature-desc">احصل على كل ما تحتاجه لتطوير جيشك وتوسيع نفوذك عبر الممالك</p></div>
+    <div class="feature-card" style="animation-delay:0.3s"><span class="feature-icon">⚡</span><h3 class="feature-title">سرعة تتجاوز الجميع</h3><p class="feature-desc">بناء وتدريب وتحرك بسرعة تفوق منافسيك وتضمن لك الريادة دائماً</p></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="divider"><div class="divider-line"></div><span class="divider-icon">♛</span><div class="divider-line"></div></div>
+  <div class="stats-row">
+    <div class="stat-item"><span class="stat-num" data-target="5000">0</span><span class="stat-label">فاتح انضم</span></div>
+    <div class="stat-item"><span class="stat-num" data-target="24">0</span><span class="stat-label">ساعة دعم</span></div>
+    <div class="stat-item"><span class="stat-num" data-target="99">0</span><span class="stat-label">% رضا العملاء</span></div>
+    <div class="stat-item"><span class="stat-num" data-target="1">0</span><span class="stat-label">ملكة لا تُهزم</span></div>
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><span class="divider-icon">✦</span><div class="divider-line"></div></div>
+
+<!-- RESOURCE CALCULATOR -->
+<section id="resources-section">
+  <div class="section-header">
+    <span class="section-label">✦ احسب طلبك ✦</span>
+    <h2 class="section-title">اطلب الموارد</h2>
+  </div>
+  <div class="resource-calculator">
+    <div class="resource-row">
+      <div class="res-icon-name">
+        <span class="res-icon">⚙️</span>
+        <div>
+          <div class="res-name">الحديد</div>
+          <div class="res-base-price" id="iron-base-label">السعر: 30 جنيه / مليار</div>
+        </div>
+      </div>
+      <div class="res-qty-wrap">
+        <button class="res-qty-btn" onclick="changeQty('iron', -0.5)">−</button>
+        <input class="res-qty-input" id="qty-iron" type="number" value="0" min="0" step="0.5" oninput="calcAll()">
+        <button class="res-qty-btn" onclick="changeQty('iron', 0.5)">+</button>
+      </div>
+      <div>
+        <div class="res-price-tag" id="price-iron">0</div>
+        <div class="res-unit">جنيه</div>
+      </div>
+    </div>
+    <div class="resource-row">
+      <div class="res-icon-name">
+        <span class="res-icon">🌾</span>
+        <div>
+          <div class="res-name">القمح</div>
+          <div class="res-base-price" id="wheat-base-label">السعر: 60 جنيه / مليار</div>
+        </div>
+      </div>
+      <div class="res-qty-wrap">
+        <button class="res-qty-btn" onclick="changeQty('wheat', -0.5)">−</button>
+        <input class="res-qty-input" id="qty-wheat" type="number" value="0" min="0" step="0.5" oninput="calcAll()">
+        <button class="res-qty-btn" onclick="changeQty('wheat', 0.5)">+</button>
+      </div>
+      <div>
+        <div class="res-price-tag" id="price-wheat">0</div>
+        <div class="res-unit">جنيه</div>
+      </div>
+    </div>
+    <div class="resource-row">
+      <div class="res-icon-name">
+        <span class="res-icon">🪵</span>
+        <div>
+          <div class="res-name">الخشب</div>
+          <div class="res-base-price" id="wood-base-label">السعر: 15 جنيه / مليار</div>
+        </div>
+      </div>
+      <div class="res-qty-wrap">
+        <button class="res-qty-btn" onclick="changeQty('wood', -0.5)">−</button>
+        <input class="res-qty-input" id="qty-wood" type="number" value="0" min="0" step="0.5" oninput="calcAll()">
+        <button class="res-qty-btn" onclick="changeQty('wood', 0.5)">+</button>
+      </div>
+      <div>
+        <div class="res-price-tag" id="price-wood">0</div>
+        <div class="res-unit">جنيه</div>
+      </div>
+    </div>
+    <div class="calc-total">
+      <div class="calc-total-label">الإجمالي</div>
+      <div><span class="calc-total-price" id="total-price">0</span> <span style="color:rgba(245,230,200,0.5);font-size:0.85rem;font-family:'Cinzel',serif;">جنيه</span></div>
+    </div>
+    <div class="calc-note">
+      كل 500 مليون إضافية = نص سعر الوحدة الأساسية<br>
+      مثال: 2 مليار حديد = 30 جنيه · 1.5 مليار قمح = 45 جنيه
+    </div>
+    <button class="order-resource-btn" onclick="orderResources()">⚔ اطلب الموارد الآن</button>
+  </div>
+</section>
+
+<!-- SUBSCRIPTIONS -->
+<section id="subscriptions">
+  <div class="section-header">
+    <span class="section-label">✦ باقات الاشتراك ✦</span>
+    <h2 class="section-title">اختر باقتك</h2>
+  </div>
+  <div class="plans-grid" id="plansGrid">
+    <!-- Injected by JS -->
+  </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div><span class="divider-icon">✦</span><div class="divider-line"></div></div>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-inner">
+    <h2 class="cta-title">🏰 ابدأ فتحك الآن</h2>
+    <p class="cta-desc">تواصل مع Karena-MLLB مباشرةً وانضم إلى آلاف الفاتحين الذين يكتبون تاريخهم في فاتحون العصر الذهبي</p>
+    <div class="cta-btns-row">
+      <button onclick="openPage('order')" class="btn-primary cta-big-btn">🛒 اطلب موارد أو بوتات</button>
+      <button onclick="openPage('contact')" class="btn-secondary cta-big-btn">📲 تواصل معنا</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">⚜ KARENA-MLLB ⚜</div>
+  <p class="footer-copy">MLLB · فاتحون العصر الذهبي · كل الحقوق محفوظة</p>
+  <button onclick="openAdminLogin()" style="background:none;border:none;color:rgba(245,230,200,0.1);font-size:0.7rem;cursor:pointer;margin-top:10px;font-family:'Cinzel',serif;letter-spacing:0.1em;" title="لوحة التحكم">⚙ Admin</button>
+</footer>
+
+<!-- ===== ORDER MODAL ===== -->
+<div class="page-overlay" id="page-order">
+  <div class="page-overlay-bg" onclick="closePage('order')"></div>
+  <div class="page-modal">
+    <div class="page-modal-top-deco"></div>
+    <button class="page-modal-close" onclick="closePage('order')">✕</button>
+    <div class="page-modal-header">
+      <span class="page-modal-icon">⚔️</span>
+      <h2 class="page-modal-title">ارفع قوتك الآن</h2>
+      <p class="page-modal-sub">✦ موارد · بوتات · خدمات فاتحون ✦</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchOrderTab('type')">نوع الطلب</button>
+      <button class="modal-tab" onclick="switchOrderTab('videos')">فيديوهات القلاع</button>
+      <button class="modal-tab" onclick="switchOrderTab('payment')">طريقة الدفع</button>
+    </div>
+
+    <!-- TAB: TYPE -->
+    <div class="tab-content active" id="tab-type">
+      <div id="order-form-wrap">
+        <p class="form-label" style="margin-bottom:12px;">اختر نوع الطلب</p>
+        <div class="order-grid">
+          <div class="order-card" onclick="selectOrder(this,'resources')">
+            <span class="check">✓</span><span class="order-card-icon">💰</span>
+            <div class="order-card-name">موارد</div>
+            <div class="order-card-desc">حديد · قمح · خشب</div>
+          </div>
+          <div class="order-card" onclick="selectOrder(this,'bots')">
+            <span class="check">✓</span><span class="order-card-icon">🤖</span>
+            <div class="order-card-name">بوتات</div>
+            <div class="order-card-desc">بوت تلقائي يعمل 24/7</div>
+          </div>
+          <div class="order-card" onclick="selectOrder(this,'both')">
+            <span class="check">✓</span><span class="order-card-icon">⚡</span>
+            <div class="order-card-name">موارد + بوت</div>
+            <div class="order-card-desc">الباقة الكاملة</div>
+          </div>
+          <div class="order-card" onclick="selectOrder(this,'castle')">
+            <span class="check">✓</span><span class="order-card-icon">🏰</span>
+            <div class="order-card-name">تطوير قلعة</div>
+            <div class="order-card-desc">رفع مستوى قلعتك</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">اسمك في اللعبة</label>
+          <input class="form-input" type="text" placeholder="اكتب اسمك هنا..." id="order-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">تفاصيل الطلب / رقم التلفون</label>
+          <textarea class="form-textarea" placeholder="أي تفاصيل إضافية..." id="order-details"></textarea>
+        </div>
+        <button class="submit-btn" onclick="submitOrder()">⚔ أرسل الطلب عبر واتساب</button>
+      </div>
+      <div class="submit-success" id="order-success">
+        <span class="submit-success-icon">🎉</span>
+        <div class="submit-success-text">تم إرسال طلبك!</div>
+        <div class="submit-success-sub">سيتم فتح واتساب لإتمام الطلب مع Karena-MLLB</div>
+      </div>
+    </div>
+
+    <!-- TAB: CASTLE VIDEOS -->
+    <div class="tab-content" id="tab-videos">
+      <p class="form-label" style="margin-bottom:18px;font-size:0.85rem;">شاهد فيديوهات القلاع قبل طلبك</p>
+      <div class="videos-grid" id="castleVideosGrid"></div>
+    </div>
+
+    <!-- TAB: PAYMENT -->
+    <div class="tab-content" id="tab-payment">
+      <p class="form-label" style="margin-bottom:16px;">اختر طريقة الدفع</p>
+      <div class="payment-methods">
+        <div class="pay-card" onclick="selectPayment(this,'vodafone')">
+          <span class="pay-icon">📱</span>
+          <div class="pay-name">فودافون كاش</div>
+        </div>
+        <div class="pay-card" onclick="selectPayment(this,'binance')">
+          <span class="pay-icon">🪙</span>
+          <div class="pay-name">Binance</div>
+        </div>
+        <div class="pay-card" onclick="selectPayment(this,'weyiraq')">
+          <span class="pay-icon">🏦</span>
+          <div class="pay-name">وي العراق</div>
+        </div>
+      </div>
+      <div class="pay-info-box" id="pay-info">
+        <div class="pay-info-label" id="pay-info-label"></div>
+        <div class="pay-info-value" id="pay-info-value"></div>
+        <button class="pay-copy-btn" onclick="copyPayInfo()">📋 نسخ</button>
+      </div>
+      <div style="margin-top:24px;padding:16px;background:rgba(201,150,42,0.05);border:1px solid rgba(201,150,42,0.1);border-radius:8px;text-align:center;">
+        <p style="font-family:'Cinzel',serif;font-size:0.75rem;color:rgba(245,230,200,0.4);letter-spacing:0.1em;">بعد الدفع أرسل صورة الإيصال عبر واتساب أو تيليجرام</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="page-overlay" id="page-contact">
+  <div class="page-overlay-bg" onclick="closePage('contact')"></div>
+  <div class="page-modal">
+    <div class="page-modal-top-deco"></div>
+    <button class="page-modal-close" onclick="closePage('contact')">✕</button>
+    <div class="page-modal-header">
+      <span class="page-modal-icon">👑</span>
+      <h2 class="page-modal-title">تواصل معنا</h2>
+      <p class="page-modal-sub">✦ نحن هنا لك في أي وقت ✦</p>
+    </div>
+    <div class="contact-options">
+      <a href="https://t.me/KARENA985" target="_blank" class="contact-card telegram">
+        <div class="contact-logo">✈️</div>
+        <div class="contact-info">
+          <div class="contact-platform">Telegram</div>
+          <div class="contact-name">@KARENA985</div>
+          <div class="contact-desc">تواصل معنا مباشرة على تيليجرام لأسرع رد ودعم فوري</div>
+        </div>
+        <div class="contact-arrow">←</div>
+      </a>
+      <div class="contact-divider"><div class="contact-divider-line"></div><span class="contact-divider-txt">أو</span><div class="contact-divider-line"></div></div>
+      <a href="https://wa.me/201018351663" target="_blank" class="contact-card whatsapp">
+        <div class="contact-logo">💬</div>
+        <div class="contact-info">
+          <div class="contact-platform">WhatsApp</div>
+          <div class="contact-name">+201018351663</div>
+          <div class="contact-desc">راسلنا على واتساب لطلب الخدمات أو الاستفسار عن أي شيء</div>
+        </div>
+        <div class="contact-arrow">←</div>
+      </a>
+      <div style="text-align:center;margin-top:20px;padding:20px;background:rgba(201,150,42,0.05);border:1px solid rgba(201,150,42,0.1);border-radius:10px;">
+        <p style="font-family:'Cinzel',serif;font-size:0.78rem;letter-spacing:0.15em;color:rgba(245,230,200,0.45);margin-bottom:8px;">ساعات التواصل</p>
+        <p style="font-family:'Cinzel Decorative',cursive;font-size:1rem;color:var(--gold-light);">10 / 10 — دائماً هنا</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLOATING BTNS -->
+<div class="floating-btns">
+  <a href="https://t.me/KARENA985" target="_blank" class="float-btn tg" data-label="تيليجرام">✈️</a>
+  <a href="https://wa.me/201018351663" target="_blank" class="float-btn wa" data-label="واتساب">💬</a>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="admin-overlay">
+  <div class="admin-panel">
+    <!-- Login -->
+    <div id="admin-login-screen" class="admin-login">
+      <div class="admin-login-box">
+        <div class="admin-title" style="font-family:'Cinzel Decorative',cursive;font-size:1.8rem;background:linear-gradient(135deg,var(--gold-bright),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;">⚙ لوحة التحكم</div>
+        <p style="font-family:'Cinzel',serif;font-size:0.75rem;color:rgba(245,230,200,0.4);letter-spacing:0.2em;margin-bottom:30px;">KARENA-MLLB ADMIN</p>
+        <input class="admin-login-input" type="password" id="admin-pass" placeholder="كلمة المرور" onkeypress="if(event.key==='Enter')checkAdmin()">
+        <button class="admin-btn" onclick="checkAdmin()" style="width:100%;padding:14px;">دخول</button>
+        <button onclick="closeAdmin()" style="background:none;border:none;color:rgba(245,230,200,0.3);font-family:'Cinzel',serif;font-size:0.75rem;cursor:pointer;margin-top:16px;letter-spacing:0.1em;">إلغاء</button>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="admin-dashboard" style="display:none;">
+      <div class="admin-header">
+        <div class="admin-title">⚙ لوحة التحكم</div>
+        <div class="admin-subtitle">KARENA-MLLB · إدارة الموقع</div>
+      </div>
+
+      <!-- PRICES -->
+      <div class="admin-section">
+        <div class="admin-section-title">💰 أسعار الموارد (جنيه / مليار)</div>
+        <div class="admin-grid">
+          <div class="admin-input-wrap">
+            <div class="admin-price-label">⚙️ الحديد</div>
+            <input class="admin-price-input" id="ap-iron" type="number" value="30" min="1">
+          </div>
+          <div class="admin-input-wrap">
+            <div class="admin-price-label">🌾 القمح</div>
+            <input class="admin-price-input" id="ap-wheat" type="number" value="60" min="1">
+          </div>
+          <div class="admin-input-wrap">
+            <div class="admin-price-label">🪵 الخشب</div>
+            <input class="admin-price-input" id="ap-wood" type="number" value="15" min="1">
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBSCRIPTION PRICES -->
+      <div class="admin-section">
+        <div class="admin-section-title">📋 أسعار الاشتراكات</div>
+        <div class="admin-plan-grid">
+          <div class="admin-plan-item">
+            <div class="admin-plan-name">شهر واحد</div>
+            <input class="admin-price-input" id="ap-plan1" type="number" value="320" min="0">
+          </div>
+          <div class="admin-plan-item">
+            <div class="admin-plan-name">شهر ونصف</div>
+            <input class="admin-price-input" id="ap-plan2" type="number" value="440" min="0">
+          </div>
+          <div class="admin-plan-item">
+            <div class="admin-plan-name">3 شهور</div>
+            <input class="admin-price-input" id="ap-plan3" type="number" value="800" min="0">
+          </div>
+          <div class="admin-plan-item">
+            <div class="admin-plan-name">شهر مجاني (عرض)</div>
+            <input class="admin-price-input" id="ap-plan4" type="number" value="0" min="0">
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENT INFO -->
+      <div class="admin-section">
+        <div class="admin-section-title">💳 بيانات طرق الدفع</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div>
+            <div class="admin-price-label" style="text-align:right;margin-bottom:6px;">📱 فودافون كاش (رقم)</div>
+            <input class="admin-price-input" id="ap-vodafone" type="text" value="01018351663" style="text-align:right;" dir="ltr">
+          </div>
+          <div>
+            <div class="admin-price-label" style="text-align:right;margin-bottom:6px;">🪙 Binance (UID)</div>
+            <input class="admin-price-input" id="ap-binance" type="text" value="1081070582" dir="ltr">
+          </div>
+          <div>
+            <div class="admin-price-label" style="text-align:right;margin-bottom:6px;">🏦 وي العراق (رقم)</div>
+            <input class="admin-price-input" id="ap-weyiraq" type="text" value="07801234567 07719986976
+تحويل رصيد اسيا 
+07719986976
+تحويل من سوبر كي 
+07719986976
+تحويل FIB 
+07719986976
+ماستر كارد 
+5556960135384560
+رقم حساب الماستر 
+7115639549" dir="ltr">
+          </div>
+        </div>
+      </div>
+
+      <!-- GALLERY MEDIA -->
+      <div class="admin-section">
+        <div class="admin-section-title">🖼 إدارة معرض الصور والفيديوهات</div>
+        <div class="admin-media-list" id="adminMediaList"></div>
+        <label class="admin-upload-area" style="cursor:pointer;">
+          <input type="file" accept="image/*,video/*" multiple style="display:none;" onchange="handleMediaUpload(event)">
+          <div class="admin-upload-icon">📂</div>
+          <div class="admin-upload-text">اضغط لرفع صور أو فيديوهات (3-10 عناصر)</div>
+        </label>
+      </div>
+
+      <!-- CASTLE VIDEOS -->
+      <div class="admin-section">
+        <div class="admin-section-title">🎬 فيديوهات القلاع (روابط)</div>
+        <div class="admin-video-list" id="adminVideoList"></div>
+        <div style="display:flex;gap:10px;margin-top:14px;">
+          <input class="admin-price-input" id="new-video-title" placeholder="عنوان الفيديو" style="flex:1;">
+          <input class="admin-price-input" id="new-video-url" placeholder="رابط يوتيوب / أي رابط" style="flex:2;" dir="ltr">
+          <button class="admin-btn" onclick="addCastleVideo()" style="white-space:nowrap;">+ إضافة</button>
+        </div>
+      </div>
+
+      <!-- SAVE -->
+      <div class="admin-save-bar">
+        <button class="admin-btn" onclick="saveAdminSettings()" style="padding:14px 40px;font-size:1rem;">💾 حفظ كل التغييرات</button>
+        <button class="admin-btn admin-btn-outline" onclick="closeAdmin()">إغلاق</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== CONFIG (managed by admin) =====
+let CONFIG = JSON.parse(localStorage.getItem('karena_config') || 'null') || {
+  prices: { iron: 30, wheat: 60, wood: 15 },
+  plans: [
+    { name: 'شهر واحد', icon: '🌙', price: 320, featured: false, features: ['بوت 24/7','دعم فوري','موارد أساسية'] },
+    { name: 'شهر ونصف', icon: '⭐', price: 440, featured: true, features: ['بوت 24/7','أولوية الدعم','موارد مضاعفة','قلعة VIP'] },
+    { name: '3 شهور', icon: '👑', price: 800, featured: false, features: ['بوت 24/7','دعم VIP','موارد بلا حدود','قلعة ملكية','خصم إضافي'] },
+    { name: 'شهر مجاني', icon: '🎁', price: 0, free: true, featured: false, features: ['حسب العرض','تواصل معنا','محدود'] }
+  ],
+  payment: { vodafone: '01018351663', binance: '123456789', weyiraq: '07801234567' },
+  gallery: [],   // {type:'image'|'video', src:string, label:string}
+  castleVideos: [] // {title:string, url:string}
+};
+function saveConfig() { localStorage.setItem('karena_config', JSON.stringify(CONFIG)); }
+
+// ===== CURSOR =====
+const cursor = document.getElementById('cursor');
+const trail  = document.getElementById('cursorTrail');
+let mx=0,my=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-9}px,${my-9}px)`;});
+function animTrail(){tx+=(mx-tx)*0.2;ty+=(my-ty)*0.2;trail.style.transform=`translate(${tx-3}px,${ty-3}px)`;requestAnimationFrame(animTrail);}
+animTrail();
+
+// ===== PARTICLES =====
+const pContainer = document.getElementById('particles');
+for(let i=0;i<50;i++){const p=document.createElement('div');p.className='particle';const size=Math.random()*4+1;const colors=['rgba(201,150,42,0.7)','rgba(240,192,64,0.5)','rgba(255,224,102,0.4)','rgba(34,85,170,0.5)'];p.style.cssText=`width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${8+Math.random()*15}s;animation-delay:${Math.random()*15}s;`;pContainer.appendChild(p);}
+
+// ===== RAYS =====
+const raysEl=document.getElementById('rays');
+for(let i=0;i<16;i++){const r=document.createElement('div');r.className='ray';const angle=(360/16)*i;r.style.setProperty('--angle',`${angle}deg`);r.style.transform=`rotate(${angle}deg)`;r.style.animationDuration=`${15+i*0.5}s`;raysEl.appendChild(r);}
+
+// ===== NAV =====
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',window.scrollY>60));
+
+// ===== INTERSECTION OBSERVER =====
+const io=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('in-view'),i*80);});},{threshold:0.15});
+document.querySelectorAll('.gallery-item,.feature-card,.stat-item,.plan-card').forEach(el=>io.observe(el));
+const countIO=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){const el=entry.target.querySelector('.stat-num');const target=parseInt(el.dataset.target);let current=0;const step=Math.ceil(target/60);const timer=setInterval(()=>{current=Math.min(current+step,target);el.textContent=current.toLocaleString();if(current>=target)clearInterval(timer);},20);countIO.unobserve(entry.target);}});},{threshold:0.5});
+document.querySelectorAll('.stat-item').forEach(el=>countIO.observe(el));
+
+// ===== LIGHTBOX =====
+const lb=document.getElementById('lightbox');
+const lbImg=document.getElementById('lightbox-img');
+document.querySelectorAll('.gallery-item img').forEach(img=>{img.addEventListener('click',()=>{lbImg.src=img.src;lb.classList.add('open');});});
+document.getElementById('lightbox-close').addEventListener('click',()=>lb.classList.remove('open'));
+lb.addEventListener('click',e=>{if(e.target===lb)lb.classList.remove('open');});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){lb.classList.remove('open');closePage('order');closePage('contact');}});
+
+// ===== PARALLAX =====
+window.addEventListener('scroll',()=>{const y=window.scrollY;const hw=document.querySelector('.hero-image-wrap');if(hw)hw.style.transform=`translateY(${y*0.08}px)`;});
+
+// ===== PAGE SYSTEM =====
+function openPage(name){document.getElementById('page-'+name).classList.add('open');document.body.style.overflow='hidden';}
+function closePage(name){document.getElementById('page-'+name).classList.remove('open');document.body.style.overflow='';}
+
+// ===== ORDER TABS =====
+function switchOrderTab(name) {
+  document.querySelectorAll('.modal-tab').forEach((t,i)=>{t.classList.toggle('active',['type','videos','payment'][i]===name);});
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(name==='videos') renderCastleVideosModal();
+}
+
+// ===== ORDER FORM =====
+let selectedType='';
+function selectOrder(card,type){document.querySelectorAll('.order-card').forEach(c=>c.classList.remove('selected'));card.classList.add('selected');selectedType=type;}
+function submitOrder(){
+  const name=document.getElementById('order-name').value.trim();
+  const details=document.getElementById('order-details').value.trim();
+  if(!selectedType){alert('اختر نوع الطلب أولاً');return;}
+  if(!name){alert('اكتب اسمك في اللعبة');return;}
+  const typeMap={resources:'موارد',bots:'بوتات',both:'موارد + بوت',castle:'تطوير قلعة'};
+  let msg=`🏰 طلب جديد - Karena-MLLB\n━━━━━━━━━━━━━━\n⚔️ النوع: ${typeMap[selectedType]}\n👤 الاسم: ${name}\n`;
+  if(details) msg+=`📝 التفاصيل: ${details}\n`;
+  msg+=`━━━━━━━━━━━━━━`;
+  document.getElementById('order-form-wrap').style.display='none';
+  document.getElementById('order-success').style.display='block';
+  setTimeout(()=>window.open(`https://wa.me/201018351663?text=${encodeURIComponent(msg)}`,'_blank'),800);
+  setTimeout(()=>{document.getElementById('order-form-wrap').style.display='block';document.getElementById('order-success').style.display='none';document.querySelectorAll('.order-card').forEach(c=>c.classList.remove('selected'));document.getElementById('order-name').value='';document.getElementById('order-details').value='';selectedType='';},5000);
+}
+
+// ===== PAYMENT =====
+let selectedPay='';
+function selectPayment(card,method){
+  document.querySelectorAll('.pay-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  selectedPay=method;
+  const info={
+    vodafone:{label:'رقم فودافون كاش',value:CONFIG.payment.vodafone},
+    binance:{label:'Binance UID',value:CONFIG.payment.binance},
+    weyiraq:{label:'رقم وي العراق',value:CONFIG.payment.weyiraq}
+  };
+  document.getElementById('pay-info-label').textContent=info[method].label;
+  document.getElementById('pay-info-value').textContent=info[method].value;
+  document.getElementById('pay-info').classList.add('show');
+}
+function copyPayInfo(){
+  const val=document.getElementById('pay-info-value').textContent;
+  navigator.clipboard.writeText(val).then(()=>{
+    const btn=document.querySelector('.pay-copy-btn');
+    btn.textContent='✅ تم النسخ!';
+    setTimeout(()=>btn.textContent='📋 نسخ',1500);
+  });
+}
+
+// ===== RESOURCE CALCULATOR =====
+function calcPrice(qty,basePrice){
+  // every billion = basePrice, every extra 500m = half basePrice
+  const billions=Math.floor(qty);
+  const half=(qty % 1 >= 0.4)?0.5:0; // treat 0.5 steps
+  return billions*basePrice + (qty % 1 >= 0.4 ? basePrice*0.5 : 0);
+}
+function calcAll(){
+  const iron=parseFloat(document.getElementById('qty-iron').value)||0;
+  const wheat=parseFloat(document.getElementById('qty-wheat').value)||0;
+  const wood=parseFloat(document.getElementById('qty-wood').value)||0;
+  const pi=CONFIG.prices.iron;
+  const pw=CONFIG.prices.wheat;
+  const pwd=CONFIG.prices.wood;
+  function price(qty,bp){
+    // For every 0.5 billion = half base price per billion
+    return qty*bp;
+  }
+  const pi_=price(iron,pi);
+  const pw_=price(wheat,pw);
+  const pwd_=price(wood,pwd);
+  document.getElementById('price-iron').textContent=pi_.toFixed(1);
+  document.getElementById('price-wheat').textContent=pw_.toFixed(1);
+  document.getElementById('price-wood').textContent=pwd_.toFixed(1);
+  document.getElementById('total-price').textContent=(pi_+pw_+pwd_).toFixed(1);
+}
+function changeQty(res,delta){
+  const inp=document.getElementById('qty-'+res);
+  let v=parseFloat(inp.value)||0;
+  v=Math.max(0,Math.round((v+delta)*10)/10);
+  inp.value=v;
+  calcAll();
+}
+function updateResourceLabels(){
+  document.getElementById('iron-base-label').textContent=`السعر: ${CONFIG.prices.iron} جنيه / مليار`;
+  document.getElementById('wheat-base-label').textContent=`السعر: ${CONFIG.prices.wheat} جنيه / مليار`;
+  document.getElementById('wood-base-label').textContent=`السعر: ${CONFIG.prices.wood} جنيه / مليار`;
+}
+function orderResources(){
+  const iron=parseFloat(document.getElementById('qty-iron').value)||0;
+  const wheat=parseFloat(document.getElementById('qty-wheat').value)||0;
+  const wood=parseFloat(document.getElementById('qty-wood').value)||0;
+  if(iron===0&&wheat===0&&wood===0){alert('اختر كمية أولاً');return;}
+  const total=parseFloat(document.getElementById('total-price').textContent);
+  let msg=`🏰 طلب موارد - Karena-MLLB\n━━━━━━━━━━━━━━\n`;
+  if(iron>0) msg+=`⚙️ حديد: ${iron} مليار\n`;
+  if(wheat>0) msg+=`🌾 قمح: ${wheat} مليار\n`;
+  if(wood>0) msg+=`🪵 خشب: ${wood} مليار\n`;
+  msg+=`━━━━━━━━━━━━━━\n💰 الإجمالي: ${total} جنيه`;
+  window.open(`https://wa.me/201018351663?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ===== SUBSCRIPTION PLANS =====
+function renderPlans(){
+  const grid=document.getElementById('plansGrid');
+  grid.innerHTML='';
+  CONFIG.plans.forEach((plan,i)=>{
+    const card=document.createElement('div');
+    card.className='plan-card'+(plan.featured?' featured':'')+(plan.free?' free-plan':'');
+    card.style.animationDelay=`${i*0.1}s`;
+    card.innerHTML=`
+      ${plan.featured?'<div class="plan-badge">الأكثر طلباً</div>':''}
+      ${plan.free?'<div class="plan-badge" style="background:#7ec8e3;color:#000;">عرض خاص</div>':''}
+      <span class="plan-icon">${plan.icon}</span>
+      <div class="plan-name">${plan.name}</div>
+      <div class="plan-price">${plan.price===0?'مجاني':plan.price}</div>
+      <div class="plan-price-unit">${plan.price===0?'حسب العرض':'جنيه'}</div>
+      <ul class="plan-features">${plan.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+      <button class="plan-btn" onclick="openPage('order')">${plan.price===0?'تواصل معنا':'اشترك الآن'}</button>
+    `;
+    grid.appendChild(card);
+    io.observe(card);
+  });
+}
+
+// ===== GALLERY - Dynamic Media =====
+function renderGallery(){
+  const masonry=document.getElementById('galleryMasonry');
+  // Remove previous dynamic items
+  masonry.querySelectorAll('.dynamic-item').forEach(el=>el.remove());
+  CONFIG.gallery.forEach(media=>{
+    const item=document.createElement('div');
+    item.className='gallery-item dynamic-item';
+    item.dataset.label=media.label||'';
+    if(media.type==='video'){
+      item.innerHTML=`<span class="video-badge">▶ فيديو</span><video src="${media.src}" muted loop preload="none" onclick="this.paused?this.play():this.pause()"></video><div class="gallery-overlay">${media.label||'فيديو'} ✦</div>`;
+    } else {
+      item.innerHTML=`<img src="${media.src}" alt="${media.label||''}"><div class="gallery-overlay">${media.label||'صورة'} ✦</div>`;
+      item.querySelector('img').addEventListener('click',function(){lbImg.src=this.src;lb.classList.add('open');});
+    }
+    masonry.appendChild(item);
+    io.observe(item);
+  });
+}
+
+// ===== CASTLE VIDEOS MODAL =====
+function renderCastleVideosModal(){
+  const grid=document.getElementById('castleVideosGrid');
+  grid.innerHTML='';
+  if(!CONFIG.castleVideos.length){
+    grid.innerHTML='<div class="no-videos-msg">📹 لا توجد فيديوهات بعد<br>سيتم إضافتها قريباً</div>';
+    return;
+  }
+  CONFIG.castleVideos.forEach(v=>{
+    const card=document.createElement('a');
+    card.href=v.url; card.target='_blank'; card.className='video-link-card';
+    card.innerHTML=`<div class="video-thumb">🎬</div><div class="video-info"><div class="video-info-title">${v.title}</div><div class="video-info-sub">اضغط للمشاهدة</div></div>`;
+    grid.appendChild(card);
+  });
+}
+
+// ===== ADMIN =====
+const ADMIN_PASS='karena2025';
+function openAdminLogin(){document.getElementById('admin-overlay').classList.add('show');document.getElementById('admin-login-screen').style.display='flex';document.getElementById('admin-dashboard').style.display='none';document.getElementById('admin-pass').value='';}
+function closeAdmin(){document.getElementById('admin-overlay').classList.remove('show');}
+function checkAdmin(){
+  if(document.getElementById('admin-pass').value===ADMIN_PASS){
+    document.getElementById('admin-login-screen').style.display='none';
+    document.getElementById('admin-dashboard').style.display='block';
+    loadAdminValues();
+  } else { alert('كلمة المرور غلط'); }
+}
+function loadAdminValues(){
+  document.getElementById('ap-iron').value=CONFIG.prices.iron;
+  document.getElementById('ap-wheat').value=CONFIG.prices.wheat;
+  document.getElementById('ap-wood').value=CONFIG.prices.wood;
+  document.getElementById('ap-plan1').value=CONFIG.plans[0].price;
+  document.getElementById('ap-plan2').value=CONFIG.plans[1].price;
+  document.getElementById('ap-plan3').value=CONFIG.plans[2].price;
+  document.getElementById('ap-plan4').value=CONFIG.plans[3].price;
+  document.getElementById('ap-vodafone').value=CONFIG.payment.vodafone;
+  document.getElementById('ap-binance').value=CONFIG.payment.binance;
+  document.getElementById('ap-weyiraq').value=CONFIG.payment.weyiraq;
+  renderAdminMediaList();
+  renderAdminVideoList();
+}
+function saveAdminSettings(){
+  CONFIG.prices.iron=parseFloat(document.getElementById('ap-iron').value)||30;
+  CONFIG.prices.wheat=parseFloat(document.getElementById('ap-wheat').value)||60;
+  CONFIG.prices.wood=parseFloat(document.getElementById('ap-wood').value)||15;
+  CONFIG.plans[0].price=parseFloat(document.getElementById('ap-plan1').value)||320;
+  CONFIG.plans[1].price=parseFloat(document.getElementById('ap-plan2').value)||440;
+  CONFIG.plans[2].price=parseFloat(document.getElementById('ap-plan3').value)||800;
+  CONFIG.plans[3].price=parseFloat(document.getElementById('ap-plan4').value)||0;
+  CONFIG.payment.vodafone=document.getElementById('ap-vodafone').value;
+  CONFIG.payment.binance=document.getElementById('ap-binance').value;
+  CONFIG.payment.weyiraq=document.getElementById('ap-weyiraq').value;
+  saveConfig();
+  updateResourceLabels();
+  calcAll();
+  renderPlans();
+  renderGallery();
+  alert('✅ تم حفظ كل التغييرات');
+}
+
+// === ADMIN MEDIA ===
+function handleMediaUpload(e){
+  const files=Array.from(e.target.files);
+  const remaining=10-CONFIG.gallery.length;
+  if(remaining<=0){alert('الحد الأقصى 10 وسائط');return;}
+  files.slice(0,remaining).forEach(file=>{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const type=file.type.startsWith('video')?'video':'image';
+      CONFIG.gallery.push({type,src:ev.target.result,label:file.name.replace(/\.[^/.]+$/,'')});
+      saveConfig();
+      renderAdminMediaList();
+      renderGallery();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function renderAdminMediaList(){
+  const list=document.getElementById('adminMediaList');
+  list.innerHTML='';
+  if(!CONFIG.gallery.length){list.innerHTML='<div style="color:rgba(245,230,200,0.3);font-family:\'Cinzel\',serif;font-size:0.75rem;grid-column:1/-1;text-align:center;padding:20px;">لا توجد وسائط</div>';return;}
+  CONFIG.gallery.forEach((m,i)=>{
+    const el=document.createElement('div');
+    el.className='admin-media-item';
+    el.innerHTML=`${m.type==='video'?`<video src="${m.src}" muted></video>`:`<img src="${m.src}" alt="">`}<div class="admin-media-label">${m.type==='video'?'فيديو':'صورة'}</div><button class="admin-media-del" onclick="deleteMedia(${i})">✕</button>`;
+    list.appendChild(el);
+  });
+}
+function deleteMedia(i){
+  CONFIG.gallery.splice(i,1);
+  saveConfig();
+  renderAdminMediaList();
+  renderGallery();
+}
+
+// === ADMIN VIDEOS ===
+function addCastleVideo(){
+  const title=document.getElementById('new-video-title').value.trim();
+  const url=document.getElementById('new-video-url').value.trim();
+  if(!title||!url){alert('أدخل العنوان والرابط');return;}
+  CONFIG.castleVideos.push({title,url});
+  saveConfig();
+  document.getElementById('new-video-title').value='';
+  document.getElementById('new-video-url').value='';
+  renderAdminVideoList();
+}
+function renderAdminVideoList(){
+  const list=document.getElementById('adminVideoList');
+  list.innerHTML='';
+  if(!CONFIG.castleVideos.length){list.innerHTML='<div style="color:rgba(245,230,200,0.3);font-family:\'Cinzel\',serif;font-size:0.75rem;text-align:center;padding:16px;">لا توجد فيديوهات</div>';return;}
+  CONFIG.castleVideos.forEach((v,i)=>{
+    const el=document.createElement('div');
+    el.className='admin-video-item';
+    el.innerHTML=`<div class="admin-video-info"><input class="admin-video-title-input" value="${v.title}" onchange="CONFIG.castleVideos[${i}].title=this.value;saveConfig();"><div class="admin-video-url">${v.url}</div></div><button class="admin-btn admin-btn-danger" onclick="deleteVideo(${i})" style="padding:8px 14px;font-size:0.8rem;">حذف</button>`;
+    list.appendChild(el);
+  });
+}
+function deleteVideo(i){CONFIG.castleVideos.splice(i,1);saveConfig();renderAdminVideoList();}
+
+// ===== INIT =====
+updateResourceLabels();
+calcAll();
+renderPlans();
+renderGallery();
+</script>
+</body>
+</html>
